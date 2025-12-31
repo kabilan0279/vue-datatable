@@ -26,6 +26,20 @@
         entries
       </div>
 
+      <div class="exportrows">
+        <button 
+          @click="exportToExcel"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          EXCEL EXPORT
+        </button>
+      </div>
+
       <div class="relative flex gap-2" ref="dropdownContainerRef">
         <!-- Dropdown button -->
         <button
@@ -89,11 +103,14 @@
             <th
               v-for="column in visibleColumns"
               :key="column.key"
-              @click="sortBy(column.key)"
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-blue-700"
+              @click="column.key !== 'View' ? sortBy(column.key) : null"
+              :class="[
+                'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
+                column.key !== 'View' ? 'cursor-pointer hover:text-blue-700' : ''
+              ]"
             >
               {{ column.label }}
-              <span v-if="sortKey === column.key">
+              <span v-if="sortKey === column.key && column.key !== 'View'">
                 {{ sortOrder === 1 ? "▲" : "▼" }}
               </span>
             </th>
@@ -380,7 +397,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch, onUnmounted } from "vue";
-
+import * as XLSX from 'xlsx';
 
 // Table data
 const tableData = ref([]);
@@ -558,6 +575,45 @@ const handleDrawerClick = (event) => {
   }
 };
 
+// Excel Export Function
+const exportToExcel = () => {
+  try {
+    // Prepare data for export (excluding the "View" column)
+    const exportData = sortedData.value.map(row => {
+      const exportRow = {};
+      visibleColumns.value.forEach(col => {
+        // Skip the "View" column from export
+        if (col.key !== 'View') {
+          exportRow[col.label] = row[col.key];
+        }
+      });
+      return exportRow;
+    });
+
+    if (exportData.length === 0) {
+      alert("No data to export!");
+      return;
+    }
+
+    // Create worksheet
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    
+    // Create workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Client Data");
+
+    // Generate Excel file
+    const fileName = `client_data_export_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+
+    console.log(`Excel file "${fileName}" exported successfully with ${exportData.length} rows.`);
+    
+  } catch (error) {
+    console.error("Error exporting to Excel:", error);
+    alert("An error occurred while exporting to Excel. Please try again.");
+  }
+};
+
 // Reset to first page when search query changes or perPage changes
 watch([searchQuery, perPage], () => {
   currentPage.value = 1;
@@ -636,5 +692,10 @@ caption {
 /* Dropdown arrow rotation */
 .rotate-180 {
   transform: rotate(180deg);
+}
+
+/* Disable cursor for View header */
+th:last-child {
+  cursor: default !important;
 }
 </style>
