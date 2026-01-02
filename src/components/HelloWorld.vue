@@ -1,50 +1,46 @@
 <template>
   <div class="p-4">
-    <!-- <div>
-      <button
-        @click="moveToVueBasics"
-        class="bg-blue-600 px-4 py-2 text-white rounded-lg"
-      >
-        back
-      </button>
-    </div> -->
-
     <!-- Global Search -->
     <div
       class="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0"
     >
-      <div class="flex items-center gap-2">
-        Show
-        <select
-          v-model.number="perPage"
-          class="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option v-for="n in [10, 50, 100, 300]" :key="n" :value="n">
-            {{ n }}
-          </option>
-        </select>
-        entries
-      </div>
+      <div class="flex gap-3">
+      
 
-      <div class="exportrows">
-        <button
-          @click="exportToExcel"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
+
+        <div class="flex items-center gap-2">
+          Show
+          <select
+            v-model.number="perPage"
+            class="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          EXPORT
-        </button>
+            <option v-for="n in [10, 50, 100, 300]" :key="n" :value="n">
+              {{ n }}
+            </option>
+          </select>
+          entries
+        </div>
+
+        <div class="exportrows">
+          <button
+            @click="exportToExcel"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-lg transition-colors duration-200 flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            EXPORT
+          </button>
+        </div>
       </div>
 
       <div class="relative flex gap-2" ref="dropdownContainerRef">
@@ -52,7 +48,7 @@
         <button
           @click="toggleColumnDropdown"
           type="button"
-          class="w-40  border border-gray-300 rounded-md bg-white px-3 py-2 text-left flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-40 border border-gray-300 rounded-md bg-white px-3 py-2 text-left flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Hide Column
           <svg
@@ -680,7 +676,7 @@ table {
 }
 th,
 td {
-    padding: 12px 10px;
+  padding: 12px 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 
