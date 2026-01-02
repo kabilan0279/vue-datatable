@@ -1,6 +1,6 @@
 <template>
-  <div class="p-2">
-    <h1 class="text-2xl font-bold mb-4 "> Client Information</h1>
+  <div class="p-2 bg-gray-50">
+    <h1 class="text-2xl text-center font-bold mb-2 ">CLIENT INFORMATION</h1>
     <DataTable />
      <router-view />
   </div>

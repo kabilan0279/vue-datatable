@@ -1,13 +1,13 @@
 <template>
   <div class="p-4">
-    <div>
+    <!-- <div>
       <button
         @click="moveToVueBasics"
         class="bg-blue-600 px-4 py-2 text-white rounded-lg"
       >
         back
       </button>
-    </div>
+    </div> -->
 
     <!-- Global Search -->
     <div
@@ -27,16 +27,23 @@
       </div>
 
       <div class="exportrows">
-        <button 
+        <button
           @click="exportToExcel"
           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="7 10 12 15 17 10" />
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
-           EXPORT
+          EXPORT
         </button>
       </div>
 
@@ -45,7 +52,7 @@
         <button
           @click="toggleColumnDropdown"
           type="button"
-          class="w-40 border rounded-md bg-white px-3 py-2 text-left flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-40  border border-gray-300 rounded-md bg-white px-3 py-2 text-left flex justify-between items-center focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           Hide Column
           <svg
@@ -90,7 +97,7 @@
           v-model="searchQuery"
           type="text"
           placeholder="Search..."
-          class="border border-gray-300 rounded px-3 py-2 w-64 lg:w-80 sm:w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="border border-gray-300 bg-gray-50 hover:bg-white rounded px-3 py-2 w-64 lg:w-80 sm:w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
     </div>
@@ -106,7 +113,9 @@
               @click="column.key !== 'View' ? sortBy(column.key) : null"
               :class="[
                 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider',
-                column.key !== 'View' ? 'cursor-pointer hover:text-blue-700' : ''
+                column.key !== 'View'
+                  ? 'cursor-pointer hover:text-blue-700'
+                  : '',
               ]"
             >
               {{ column.label }}
@@ -397,7 +406,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch, onUnmounted } from "vue";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 
 // Table data
 const tableData = ref([]);
@@ -579,11 +588,11 @@ const handleDrawerClick = (event) => {
 const exportToExcel = () => {
   try {
     // Prepare data for export (excluding the "View" column)
-    const exportData = sortedData.value.map(row => {
+    const exportData = sortedData.value.map((row) => {
       const exportRow = {};
-      visibleColumns.value.forEach(col => {
+      visibleColumns.value.forEach((col) => {
         // Skip the "View" column from export
-        if (col.key !== 'View') {
+        if (col.key !== "View") {
           exportRow[col.label] = row[col.key];
         }
       });
@@ -597,17 +606,20 @@ const exportToExcel = () => {
 
     // Create worksheet
     const ws = XLSX.utils.json_to_sheet(exportData);
-    
+
     // Create workbook
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Client Data");
 
     // Generate Excel file
-    const fileName = `client_data_export_${new Date().toISOString().split('T')[0]}.xlsx`;
+    const fileName = `client_data_export_${
+      new Date().toISOString().split("T")[0]
+    }.xlsx`;
     XLSX.writeFile(wb, fileName);
 
-    console.log(`Excel file "${fileName}" exported successfully with ${exportData.length} rows.`);
-    
+    console.log(
+      `Excel file "${fileName}" exported successfully with ${exportData.length} rows.`
+    );
   } catch (error) {
     console.error("Error exporting to Excel:", error);
     alert("An error occurred while exporting to Excel. Please try again.");
@@ -640,10 +652,10 @@ onUnmounted(() => {
 });
 
 // back button click event
-const moveToVueBasics = () => {
-  alert("Navigating to vueBasics");
-  // router.push({ name: 'vueBasics' });
-};
+// const moveToVueBasics = () => {
+//   alert("Navigating to vueBasics");
+//   // router.push({ name: 'vueBasics' });
+// };
 </script>
 
 <style scoped>
@@ -668,12 +680,14 @@ table {
 }
 th,
 td {
-  padding: 12px 10px;
+    padding: 12px 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  word-break: break-word;
 }
 th {
   background-color: #f1f1f1;
